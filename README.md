@@ -18,7 +18,7 @@ Análise de fraude em ambiente de cartão não-presente (CNP) com motor de regra
 
 ## Contexto
 
-Em adquirência, cada fraude não detectada vira chargeback — perda financeira direta para o sub-adquirente.
+Em adquirência, cada fraude não detectada vira chargeback, perda financeira direta para o sub-adquirente.
 O desafio não é só detectar fraude. É detectar antes que o chargeback aconteça, em milissegundos, sem bloquear clientes legítimos.
 
 Este projeto analisa **3.199 transações CNP reais** cobrindo novembro de 2019, com taxa de fraude de 12.2%.
@@ -59,7 +59,7 @@ Top ofensores com 83-100% de taxa de chargeback.
 
 **Card Testing**
 Micro-transações (< R$10) em sequência para validar cartões roubados antes de compras maiores.
-Achado contra-intuitivo: CBK rate de 1.9% nas próprias micro-transações — o chargeback aparece na transação grande que vem depois.
+Achado contra-intuitivo: CBK rate de 1.9% nas próprias micro-transações o chargeback aparece na transação grande que vem depois.
 
 **Multi-Card Device**
 Mesmo dispositivo utilizado com 4+ cartões distintos em 7 dias.
@@ -68,7 +68,7 @@ Device 563499: 22 cartões distintos, 19 chargebacks.
 
 **Merchant Concentrado**
 Merchants com taxa de chargeback acima de 50%.
-Merchant 1308: R$ 34.517 em chargebacks, 100% CBK rate — indicativo de merchant comprometido ou conivente.
+Merchant 1308: R$ 34.517 em chargebacks, 100% CBK rate, um indicativo de merchant comprometido ou conivente.
 
 **Near-Duplicates**
 Mesmo usuário + merchant, intervalo < 5 minutos, valores com diferença < R$100.
@@ -101,7 +101,7 @@ Tratado como sinal de risco incremental.
 
 **Escolha: XGBoost**
 
-Em detecção de fraude, o custo de deixar uma fraude passar (chargeback = perda direta) é maior que o custo de bloquear um cliente legítimo (vai para revisão humana antes de qualquer bloqueio definitivo). XGBoost captura mais fraude (61 vs 52 no conjunto de teste) ao custo de mais falsos positivos que são tratados na fila de revisão — não em bloqueios automáticos.
+Em detecção de fraude, o custo de deixar uma fraude passar (chargeback = perda direta) é maior que o custo de bloquear um cliente legítimo (vai para revisão humana antes de qualquer bloqueio definitivo). XGBoost captura mais fraude (61 vs 52 no conjunto de teste) ao custo de mais falsos positivos que são tratados na fila de revisão, não em bloqueios automáticos.
 
 ### 5. Sistema Anti-Fraude em Duas Camadas
 
@@ -125,7 +125,7 @@ Score < 30  →  APPROVE
 
 ### 6. Backtest Cronológico
 
-Simulação com isolamento temporal estrito: cada transação avaliada usando apenas histórico anterior a ela — sem data leakage.
+Simulação com isolamento temporal estrito: cada transação avaliada usando apenas histórico anterior a ela, sem data leakage.
 
 ```
 ╔══════════════════════════════════════════════════╗
@@ -151,7 +151,7 @@ Simulação com isolamento temporal estrito: cada transação avaliada usando ap
 
 **Cold Start**
 Primeiras transações de novos usuários têm features históricas zeradas.
-Solução: adicionar features de contexto independentes de histórico — geolocalização por IP, tipo de BIN, resultado do 3DS.
+Solução: adicionar features de contexto independentes de histórico como geolocalização por IP, tipo de BIN, resultado do 3DS.
 
 **Concept Drift**
 Fraudadores adaptam o comportamento ao longo do tempo.
@@ -162,7 +162,7 @@ O dataset não contém IP, resultado de autenticação 3DS, ou geolocalização.
 Com essas informações, a performance do modelo seria significativamente maior.
 
 **Escalabilidade**
-O cálculo de `cards_on_device_7d` usa um loop por linha — funciona para análise offline mas não para produção.
+O cálculo de `cards_on_device_7d` usa um loop por linha, funciona para análise offline mas não para produção.
 Em produção: query indexada em banco de dados ou stream aggregation (Kafka/Flink) com estado por device.
 
 ---
